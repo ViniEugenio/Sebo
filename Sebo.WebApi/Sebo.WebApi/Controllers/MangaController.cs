@@ -6,6 +6,7 @@ using Sebo.Application.Commands.CreateManga;
 using Sebo.Application.Queries.GetAllChapterFiles;
 using Sebo.Core.Helpers.Messages;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sebo.WebApi.Controllers
@@ -49,7 +50,13 @@ namespace Sebo.WebApi.Controllers
         public async Task<IActionResult> GetAllChapterFiles(Guid ChapterId)
         {
 
-            return Ok(await Mediator.Send(new GetAllChapterFilesQuery(ChapterId)));
+            var FoundedFiles = await Mediator.Send(new GetAllChapterFilesQuery(ChapterId));
+            if (FoundedFiles == null)
+            {
+                return NotFound(MangaMessages.NotFoundedFiles);
+            }
+
+            return Ok(FoundedFiles);
 
         }
 

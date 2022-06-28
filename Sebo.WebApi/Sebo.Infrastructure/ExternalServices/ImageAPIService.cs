@@ -1,4 +1,6 @@
-﻿using Sebo.Core.Services;
+﻿using Microsoft.Extensions.Configuration;
+using Sebo.Core.Helpers;
+using Sebo.Core.Services;
 using Sebo.Core.ViewModels;
 using Sebo.Infrastructure.ExternalServices.Client;
 using System;
@@ -10,13 +12,23 @@ namespace Sebo.Infrastructure.ExternalServices
     public class ImageAPIService : ClientService, IImageAPIService
     {
 
-        public ImageAPIService() : base("")
+        public ImageAPIService(IConfiguration Configuration)
+            : base(Configuration.GetSection("ExternalServices:ImagesAPI").Value)
         {
         }
 
-        public Task<List<ChapterFileViewModel>> GetAllChapterFiles(Guid ChapterId)
+        public async Task<List<ChapterFileViewModel>> GetAllChapterFiles(Guid ChapterId)
         {
-            return Get<List<ChapterFileViewModel>>(ChapterId.ToString());
+
+            var Response = await Get(ChapterId.ToString());
+
+            if (Response.IsSuccessStatusCode)
+            {
+                return await HttpClientHelper.FormatResponse<List<ChapterFileViewModel>>(Response);
+            }
+
+            return null;
+
         }
 
     }

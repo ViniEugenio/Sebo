@@ -1,5 +1,4 @@
-﻿using Sebo.Core.Helpers;
-using Sebo.Core.Services;
+﻿using Sebo.Core.Services;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,14 +18,9 @@ namespace Sebo.Infrastructure.ExternalServices.Client
 
         }
 
-        public async Task<T> Get<T>(string Endpoint)
+        public async Task<HttpResponseMessage> Get(string Endpoint)
         {
-
-            using (var content = await Client.GetAsync(Endpoint))
-            {
-                return await HttpClientHelper.FormatResponse<T>(content);
-            }
-
+            return await Client.GetAsync(Endpoint);
         }
 
     }

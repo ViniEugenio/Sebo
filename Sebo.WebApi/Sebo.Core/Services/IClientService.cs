@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Sebo.Core.Services
 {
     public interface IClientService
     {
-        Task<T> Get<T>(string Endpoint);
+        Task<HttpResponseMessage> Get(string Endpoint);
     }
 }
 
